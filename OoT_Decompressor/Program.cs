@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Linq;
 
 namespace OoT_Decompressor
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            if (!args.Any())
+                throw new Exception("Missing input argument.");
+
+            var inputPath = args[0];
+            var outputPath = args.Length > 1 ? args[1] : args[0].Substring(0, args[0].LastIndexOf('.')) + "-decomp.z64";
+
+            Decompress.DecompressOoT(inputPath, outputPath);
         }
     }
 }
