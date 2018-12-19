@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OoT_Decompressor", "OoT_Decompressor\OoT_Decompressor.csproj", "{3784DA74-C9FE-41BA-9E79-B970CA34C5DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OoT_ROM_Tools", "OoT_ROM_Tools\OoT_ROM_Tools.csproj", "{3784DA74-C9FE-41BA-9E79-B970CA34C5DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

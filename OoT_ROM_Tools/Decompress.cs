@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace OoT_Decompressor
+namespace OoT_ROM_Tools
 {
     public static class Decompress
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OoT_Decompressor
+namespace OoT_ROM_Tools
 {
     public struct TableEntry
     {

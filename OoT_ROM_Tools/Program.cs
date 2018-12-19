@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace OoT_Decompressor
+namespace OoT_ROM_Tools
 {
     internal class Program
     {

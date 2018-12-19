@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace OoT_Decompressor
+namespace OoT_ROM_Tools
 {
     public static class Util
     {
