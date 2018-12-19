@@ -8,7 +8,14 @@ namespace OoT_ROM_Tools
         public static void DecompressOoT(string inputPath, string outputPath)
         {
             var inputRom = File.ReadAllBytes(inputPath);
+            var outputRom = DecompressOoT(inputRom);
 
+            // Write output file.
+            File.WriteAllBytes(outputPath, outputRom);
+        }
+
+        public static byte[] DecompressOoT(byte[] inputRom)
+        {
             // Size check.
             if (inputRom.Length != 0x2000000)
                 throw new Exception("ROM is not the correct size for a compressed OoT ROM.");
@@ -27,7 +34,7 @@ namespace OoT_ROM_Tools
             var inputTable = inputRom.Slice(tableStart, table.EndVirtual - tableStart);
             var outputTable = outputRom.Slice(tableStart, table.EndVirtual - tableStart);
 
-            // Set everything part the table in outputRom to 0.
+            // Set everything past the table in outputRom to 0.
             Array.Clear(outputRom, table.EndVirtual, outputRom.Length - table.EndVirtual);
 
             for (var i = 3; i < tableCount; i++)
@@ -50,8 +57,7 @@ namespace OoT_ROM_Tools
 
             N64CRC.FixCRC(outputRom);
 
-            // Write output file.
-            File.WriteAllBytes(outputPath, outputRom);
+            return outputRom;
         }
 
         private static void Decode(Span<byte> source, Span<byte> destination, int size)

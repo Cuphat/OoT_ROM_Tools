@@ -17,10 +17,11 @@ namespace OoT_ROM_Tools
         private const uint ChecksumCIC6105 = 0xDF26F436;
         private const uint ChecksumCIC6106 = 0x1FEA617A;
 
-        public byte[] Bytes { get; set; }
+        private readonly byte[] _bytes;
+        public Span<byte> Bytes => _bytes.Slice(0, ChecksumStart + ChecksumLength);
 
         public N64CRC() { }
-        public N64CRC(byte[] bytes) => Bytes = bytes;
+        public N64CRC(byte[] bytes) => _bytes = bytes;
 
         public static void FixCRC(byte[] bytes)
         {
@@ -30,10 +31,9 @@ namespace OoT_ROM_Tools
 
         public void FixCRC()
         {
-            var bytesSpan = Bytes.Slice(0, ChecksumStart + ChecksumLength);
-            var crc = N64CalcCRC(bytesSpan);
-            Util.UIntToBytes(crc[0]).CopyTo(bytesSpan.Slice(N64CRC1, 4));
-            Util.UIntToBytes(crc[1]).CopyTo(bytesSpan.Slice(N64CRC2, 4));
+            var crc = N64CalcCRC();
+            Util.UIntToBytes(crc[0]).CopyTo(Bytes.Slice(N64CRC1, 4));
+            Util.UIntToBytes(crc[1]).CopyTo(Bytes.Slice(N64CRC2, 4));
         }
 
         private static uint ROL(uint i, int b) => (i << b) | (i >> (32 - b));
@@ -75,9 +75,9 @@ namespace OoT_ROM_Tools
             return ~crc;
         }
 
-        private static int N64GetCIC(Span<byte> bytes)
+        private int N64GetCIC()
         {
-            switch (CRC32(bytes.Slice(N64HeaderSize, N64BCSize)))
+            switch (CRC32(Bytes.Slice(N64HeaderSize, N64BCSize)))
             {
                 case 0x6170A4A1: return 6101;
                 case 0x90BB6CB5: return 6102;
@@ -88,11 +88,11 @@ namespace OoT_ROM_Tools
             }
         }
 
-        private static uint[] N64CalcCRC(Span<byte> bytes)
+        private uint[] N64CalcCRC()
         {
             var crc = new uint[2];
             uint seed;
-            var bootCode = N64GetCIC(bytes);
+            var bootCode = N64GetCIC();
 
             switch (bootCode)
             {
@@ -118,7 +118,7 @@ namespace OoT_ROM_Tools
             var i = ChecksumStart;
             while (i < ChecksumStart + ChecksumLength)
             {
-                var d = Util.BytesToUInt(bytes.Slice(i, 4));
+                var d = Util.BytesToUInt(Bytes.Slice(i, 4));
                 if (t6 + d < t6)
                     t4++;
                 t6 += d;
@@ -132,7 +132,7 @@ namespace OoT_ROM_Tools
                     t2 ^= t6 ^ d;
 
                 if (bootCode == 6105)
-                    t1 += Util.BytesToUInt(bytes.Slice(N64HeaderSize + 0x0710 + (i & 0xFF), 4)) ^ d;
+                    t1 += Util.BytesToUInt(Bytes.Slice(N64HeaderSize + 0x0710 + (i & 0xFF), 4)) ^ d;
                 else
                     t1 += t5 ^ d;
 

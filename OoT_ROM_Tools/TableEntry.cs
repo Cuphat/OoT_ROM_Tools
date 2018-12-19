@@ -54,7 +54,7 @@ namespace OoT_ROM_Tools
         {
             i = i * 16;
             var intBytes = new byte[16];
-            Util.IntToBytes(StartVirtual).CopyTo(intBytes.Slice(0,4));
+            Util.IntToBytes(StartVirtual).CopyTo(intBytes.Slice(0, 4));
             Util.IntToBytes(EndVirtual).CopyTo(intBytes.Slice(4, 4));
             Util.IntToBytes(StartPhysical).CopyTo(intBytes.Slice(8, 4));
             Util.IntToBytes(EndPhysical).CopyTo(intBytes.Slice(12, 4));
